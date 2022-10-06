@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>API</name>
+    </assembly>
+    <members>
+        <member name="M:API.Controllers.CategoryController.GetCategories">
+            <summary>
+            Get list of category story.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:API.Controllers.CategoryController.GetCategory(System.Guid)">
+            <summary>
+            Get individual category story
+            </summary>
+            <param name="categoryId">The Id of the category story</param>
+            <returns></returns>
+        </member>
+        <member name="M:API.Controllers.CityController.GetCities">
+            <summary>
+            Get list of city.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:API.Controllers.CityController.GetCity(System.Int32)">
+            <summary>
+            Get individual city
+            </summary>
+            <param name="cityId">The Id of the city</param>
+            <returns></returns>
+        </member>
+        <member name="M:API.Controllers.StoryController.GetStories">
+            <summary>
+            Get list of story.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:API.Controllers.StoryController.GetStory(System.Guid)">
+            <summary>
+            Get individual story story
+            </summary>
+            <param name="storyId">The id of the story</param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
