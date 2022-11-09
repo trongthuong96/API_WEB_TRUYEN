@@ -12,6 +12,7 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public class CityController : Controller
     {
         private readonly ICityRepository _cityRepository;

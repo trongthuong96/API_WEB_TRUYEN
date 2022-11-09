@@ -28,7 +28,7 @@ namespace API.Repository
 
         public bool CreateOrUpdateCategory(Category category)
         {
-            _db.Categories.Add(category);
+            _db.Categories.Update(category);
             return Save();
         }
 

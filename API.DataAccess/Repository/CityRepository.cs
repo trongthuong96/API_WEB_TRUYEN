@@ -29,7 +29,7 @@ namespace API.DataAccess.Repository
 
         public bool CreateOrUpdateCity(City city)
         {
-            _db.Cities.Add(city);
+            _db.Cities.Update(city);
             return Save();
         }
 
@@ -41,12 +41,12 @@ namespace API.DataAccess.Repository
 
         public ICollection<City> GetCities()
         {
-            return _db.Cities.OrderBy(c => c.Name).ToList();
+            return _db.Cities.ToList();
         }
 
-        public City GetCity(int cityId)
+        public City GetCity(int id)
         {
-            return _db.Cities.FirstOrDefault(c => c.Id == cityId);
+            return _db.Cities.FirstOrDefault(c => c.Id == id);
         }
 
         public bool Save()

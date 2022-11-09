@@ -1,4 +1,6 @@
 using API.Data;
+using API.DataAccess.Repository;
+using API.DataAccess.Repository.IRepository;
 using API.Mapper;
 using API.Models.Models;
 using API.Repository;
@@ -39,6 +41,7 @@ namespace API
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IStoryRepository, StoryRepository>();
+            services.AddScoped<ICityRepository, CityRepository>();
             services.AddScoped<IAuthorRepository, AuthorRepository>();
             services.AddAutoMapper(typeof(Mappings));
             services.AddSwaggerGen(options =>

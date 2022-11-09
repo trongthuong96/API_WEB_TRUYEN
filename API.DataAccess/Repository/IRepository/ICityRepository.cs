@@ -8,7 +8,7 @@ namespace API.DataAccess.Repository.IRepository
     public interface ICityRepository
     {
         ICollection<City> GetCities();
-        City GetCity(int cityId);
+        City GetCity(int id);
         bool CityExists(int id);
         bool CityExists(string name);
         bool CreateOrUpdateCity(City city);

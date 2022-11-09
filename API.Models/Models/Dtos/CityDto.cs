@@ -9,10 +9,10 @@ namespace API.Models.Models
     {
         public int Id { get; set; }
         [Required]
-        [MaxLength(20)]
+        [MaxLength(30)]
         public string Name { get; set; }
         [Required]
-        [MaxLength(3)]
+        [MaxLength(20)]
         public string Code { get; set; }
     }
 }
