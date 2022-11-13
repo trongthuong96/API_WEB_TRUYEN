@@ -24,5 +24,6 @@ namespace API.Models
         public string UserId { get; set; }
         [Required]
         public AuthorCreateDto Author { get; set; }
+        public DateTime UpdateDate { get; set; }
     }
 }

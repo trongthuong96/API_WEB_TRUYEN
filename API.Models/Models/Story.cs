@@ -21,6 +21,8 @@ namespace API.Models
         public string Description { get; set; }
         [Required]
         public string Status { get; set; }
+        [Required]
+        public string Image { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public int Views { get; set; }

@@ -22,5 +22,7 @@ namespace API.Models
         public string UserId { get; set; }
         [Required]
         public AuthorCreateDto Author { get; set; }
+        [Required]
+        public string Image { get; set; }
     }
 }

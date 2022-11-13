@@ -35,13 +35,17 @@ namespace API.Controllers
         [ProducesResponseType(200, Type = typeof(List<StoryDto>))]
         public IActionResult GetStories()
         {
-            var objList = _storyRepository.GetStoriesToAuthor("string");
+            var objList = _storyRepository.GetStories();
 
             var objDto = new List<StoryDto>();
+            var storyDto = new StoryDto();
 
             foreach (var obj in objList)
             {
-                objDto.Add(_mapper.Map<StoryDto>(obj));
+                storyDto = _mapper.Map<StoryDto>(obj);
+                // author name
+                storyDto.AuthorName = _authorRepository.GetAuthor(obj.AuthorId).pseudonym;
+                objDto.Add(storyDto);
             }
 
             return Ok(objDto);
@@ -65,6 +69,7 @@ namespace API.Controllers
             }
 
             var objDto = _mapper.Map<StoryDto>(obj);
+            objDto.AuthorName = _authorRepository.GetAuthor(obj.AuthorId).pseudonym;
             return Ok(objDto);
         }
 
@@ -113,6 +118,7 @@ namespace API.Controllers
                 storyDto.Status = storyCreateDto.Status;
                 storyDto.Description = storyCreateDto.Description;
                 storyDto.UserId = storyCreateDto.UserId;
+                storyDto.Image = storyCreateDto.Image;
                 storyDto.Views = 0;
 
                 storyObj = _mapper.Map<Story>(storyDto);
@@ -121,6 +127,9 @@ namespace API.Controllers
             {
                 storyObj = _mapper.Map<Story>(storyCreateDto);
             }
+            //add date
+            storyObj.CreateDate = DateTime.Now;
+            storyObj.UpdateDate = DateTime.Now;
 
             // create story
             if (!_storyRepository.CreateOrUpdateStory(storyObj))
@@ -143,8 +152,11 @@ namespace API.Controllers
                 return BadRequest(ModelState);
             }
 
+            //change
             var storyObj = _mapper.Map<Story>(storyDto);
+            storyDto.UpdateDate = DateTime.Now;
 
+            //change data
             if (!_storyRepository.CreateOrUpdateStory(storyObj))
             {
                 ModelState.AddModelError("", $"Đã xảy ra sự cố khi cập nhập {storyObj.Name}");
