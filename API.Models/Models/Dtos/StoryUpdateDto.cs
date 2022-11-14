@@ -1,4 +1,5 @@
 ﻿using API.Models.Models;
+using API.Models.Models.Dtos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
@@ -25,5 +26,7 @@ namespace API.Models
         [Required]
         public AuthorCreateDto Author { get; set; }
         public DateTime UpdateDate { get; set; }
+        [Required]
+        public ICollection<CategoryStoryDto> categoryStoryDtos { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using API.Models;
 using API.Models.Models;
+using API.Models.Models.Dtos;
 using AutoMapper;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,7 @@ namespace API.Mapper
             CreateMap<Story, StoryCreateDto>().ReverseMap();
             CreateMap<Author, AuthorCreateDto>().ReverseMap();
             CreateMap<City, CityDto>().ReverseMap();
+            CreateMap<CategoryStory, CategoryStoryDto>().ReverseMap();
         }
         
     }

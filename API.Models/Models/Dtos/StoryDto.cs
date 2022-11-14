@@ -1,4 +1,5 @@
 ﻿using API.Models.Models;
+using API.Models.Models.Dtos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
@@ -28,5 +29,6 @@ namespace API.Models
         public string UserId { get; set; }
         [Required]
         public Guid AuthorId { get; set; }
+        public ICollection<string> CategoryName { get; set; }
     }
 }

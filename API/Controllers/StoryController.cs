@@ -1,4 +1,7 @@
-﻿using API.Models;
+﻿using API.DataAccess.Repository.IRepository;
+using API.Models;
+using API.Models.Models;
+using API.Models.Models.Dtos;
 using API.Repository;
 using API.Repository.IRepository;
 using AutoMapper;
@@ -18,13 +21,17 @@ namespace API.Controllers
     {
         private readonly IStoryRepository _storyRepository;
         private readonly IAuthorRepository _authorRepository;
+        private readonly ICategoryRepository _categoryRepository;
+        private readonly ICategoryStoryRepository _categoryStoryRepository;
         private readonly IMapper _mapper;
 
-        public StoryController(IStoryRepository storyRepository, IMapper mapper, IAuthorRepository authorRepository)
+        public StoryController(IStoryRepository storyRepository, IMapper mapper, IAuthorRepository authorRepository, ICategoryRepository categoryRepository, ICategoryStoryRepository categoryStoryRepository)
         {
             _storyRepository = storyRepository;
             _mapper = mapper;
             _authorRepository = authorRepository;
+            _categoryRepository = categoryRepository;
+            _categoryStoryRepository = categoryStoryRepository;
         }
 
         /// <summary>
@@ -45,6 +52,15 @@ namespace API.Controllers
                 storyDto = _mapper.Map<StoryDto>(obj);
                 // author name
                 storyDto.AuthorName = _authorRepository.GetAuthor(obj.AuthorId).pseudonym;
+
+                // category name
+                ICollection<CategoryStory> list = _categoryStoryRepository.GetCategories(storyDto.Id);
+                storyDto.CategoryName = new List<String>();
+
+                foreach (CategoryStory cs in list)
+                {
+                    storyDto.CategoryName.Add(_categoryRepository.GetCategory(cs.CategoryId).Name);
+                }
                 objDto.Add(storyDto);
             }
 
@@ -70,6 +86,16 @@ namespace API.Controllers
 
             var objDto = _mapper.Map<StoryDto>(obj);
             objDto.AuthorName = _authorRepository.GetAuthor(obj.AuthorId).pseudonym;
+
+            // category name
+            ICollection<CategoryStory> list = _categoryStoryRepository.GetCategories(objDto.Id);
+            objDto.CategoryName = new List<String>();
+
+            foreach (CategoryStory cs in list)
+            {
+                objDto.CategoryName.Add(_categoryRepository.GetCategory(cs.CategoryId).Name);
+            }
+
             return Ok(objDto);
         }
 
@@ -99,6 +125,7 @@ namespace API.Controllers
                 return BadRequest(ModelState);
             }
 
+            
             var authorDto = storyCreateDto.Author;
 
             // check author null
@@ -138,7 +165,39 @@ namespace API.Controllers
                 return StatusCode(500, ModelState);
             }
 
-            return CreatedAtRoute("GetStory", new { storyId = storyObj.Id}, storyObj);
+            // create category_story
+
+            Guid storyId = storyObj.Id;
+
+            ICollection<CategoryStoryDto> categoryStoryDtos = storyCreateDto.categoryStoryDtos;
+            foreach (CategoryStoryDto categoryStory in categoryStoryDtos)
+            {
+                if (!_categoryRepository.CategoryExists(categoryStory.CategoryId))
+                {
+                    ModelState.AddModelError("", "Khong ton tai the loai nay");
+                    return StatusCode(500, ModelState);
+                }
+                else
+                {
+                    categoryStory.StoryId = storyId;
+                }
+            }
+
+            foreach (CategoryStoryDto categoryStory in categoryStoryDtos)
+            {
+                var categoryStoryObj = new CategoryStory();
+                categoryStoryObj.Category = _categoryRepository.GetCategory(categoryStory.CategoryId);
+                categoryStoryObj.Story = storyObj;
+
+                // create categoryStory
+                if (!_categoryStoryRepository.CreateOrUpdateCategoryStory(categoryStoryObj))
+                {
+                    ModelState.AddModelError("", $"Đã xảy ra sự cố khi lưu {storyObj.Name}");
+                    return StatusCode(500, ModelState);
+                }
+            }
+
+            return CreatedAtRoute("GetStory", new { storyId = storyObj.Id }, storyObj);
         }
 
         [HttpPatch("{storyId:Guid}", Name = "UpdateStory")]

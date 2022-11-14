@@ -27,6 +27,7 @@ namespace API.Data
         public DbSet<Like> Likes { get; set; }
         public DbSet<Tick> Ticks { get; set; }
         public DbSet<Author> Authors { get; set; }
+        public DbSet<Chapter> Chapters { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
