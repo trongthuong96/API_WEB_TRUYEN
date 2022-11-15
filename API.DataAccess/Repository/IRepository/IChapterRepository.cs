@@ -10,7 +10,7 @@ namespace API.DataAccess.Repository.IRepository
         ICollection<Chapter> GetChapters(Guid storyId);
         Chapter GetChapter(Guid storyId, Guid chapterId);
         bool ChapterExists(Guid chapterId, Guid storyId);
-        bool ChapterExists(string name);
+        bool ChapterExists(string name, Guid storyId);
         bool CreateChapter(Chapter chapter);
         bool UpdateChapter(Chapter chapter);
         bool DeleteChapter(Chapter chapter);

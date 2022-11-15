@@ -89,8 +89,14 @@ namespace API.Controllers
                 return BadRequest(ModelState);
             }
 
+            // check story
+            if (!_storyRepository.StoryExists(chapterCreateDto.StoryId)) //true
+            {
+                return NotFound("Truyện này chưa được tạo!");
+            }
+
             // check name chapter -- unique
-            if (_chapterRepository.ChapterExists(chapterCreateDto.Name))
+            if (_chapterRepository.ChapterExists(chapterCreateDto.Name, chapterCreateDto.StoryId))
             {
                 ModelState.AddModelError("", "Đã tồn tại chương này!");
                 return StatusCode(404, ModelState);
@@ -104,12 +110,6 @@ namespace API.Controllers
 
 
             var chapterObj = new Chapter();
-
-            // check story
-            if (!_storyRepository.StoryExists(chapterCreateDto.StoryId)) //true
-            {
-                return NotFound("Truyện này chưa được tạo!");
-            }
 
             chapterObj = _mapper.Map<Chapter>(chapterCreateDto);
 

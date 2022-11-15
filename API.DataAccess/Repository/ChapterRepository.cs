@@ -20,9 +20,9 @@ namespace API.DataAccess.Repository
             return _db.Chapters.Any(c => c.Id == chapterId && c.StoryId == storyId);
         }
 
-        public bool ChapterExists(string name)
+        public bool ChapterExists(string name, Guid storyId)
         {
-            return _db.Chapters.Any(c => c.Name == name);
+            return _db.Chapters.Any(c => c.Name == name && c.StoryId == storyId);
         }
 
         public bool CreateChapter(Chapter chapter)
