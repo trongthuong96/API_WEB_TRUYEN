@@ -80,7 +80,7 @@ namespace API.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (_userRepository.UserExists(userCreateDto.UserName))
+            if (userCreateDto.UserName !=null && _userRepository.UserExists(userCreateDto.UserName))
             {
                 return StatusCode(404, "Đã có username này!");
             } else if (_userRepository.EmailExists(userCreateDto.Email))
