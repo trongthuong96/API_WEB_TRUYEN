@@ -4,6 +4,19 @@
         <name>API</name>
     </assembly>
     <members>
+        <member name="M:API.Controllers.ApplicationUserController.GetCategories">
+            <summary>
+            Get list of user story.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:API.Controllers.ApplicationUserController.GetApplicationUser(System.String)">
+            <summary>
+            Get individual user story
+            </summary>
+            <param name="userId">The Id of the user story</param>
+            <returns></returns>
+        </member>
         <member name="M:API.Controllers.CategoryController.GetCategories">
             <summary>
             Get list of category story.
