@@ -20,6 +20,9 @@ namespace API.Mapper
             CreateMap<Author, AuthorCreateDto>().ReverseMap();
             CreateMap<City, CityDto>().ReverseMap();
             CreateMap<CategoryStory, CategoryStoryDto>().ReverseMap();
+            CreateMap<Chapter, ChapterCreateDto>().ReverseMap();
+            CreateMap<Chapter, ChapterDto>().ReverseMap();
+            CreateMap<Chapter, ChapterUpdateDto>().ReverseMap();
         }
         
     }

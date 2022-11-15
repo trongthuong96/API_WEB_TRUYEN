@@ -44,6 +44,7 @@ namespace API
             services.AddScoped<ICityRepository, CityRepository>();
             services.AddScoped<IAuthorRepository, AuthorRepository>();
             services.AddScoped<ICategoryStoryRepository, CategoryStoryRepository>();
+            services.AddScoped<IChapterRepository, ChapterRepository>();
             services.AddAutoMapper(typeof(Mappings));
             services.AddSwaggerGen(options =>
             {

@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace API.Models.Models
+namespace API.Models.Models.Dtos
 {
-    public class Chapter
+    public class ChapterDto
     {
+        [Required]
         public Guid Id { get; set; }
         [Required]
         public int NumberChapter { get; set; }
@@ -21,7 +21,6 @@ namespace API.Models.Models
 
         [Required]
         public Guid StoryId { get; set; }
-        [ForeignKey("StoryId")]
-        public Story Story { get; set; }
+        public String StoryName { get; set; }
     }
 }

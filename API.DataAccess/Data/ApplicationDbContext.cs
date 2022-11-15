@@ -42,6 +42,9 @@ namespace API.Data
             builder.Entity<CategoryStory>()
                 .HasKey(l => new { l.StoryId, l.CategoryId });
 
+            builder.Entity<Chapter>()
+                .HasKey(l => new { l.Id, l.StoryId });
+
             /*builder
                 .Entity<Like>()
                 .HasOne(e => e.User)

@@ -17,6 +17,21 @@
             <param name="categoryId">The Id of the category story</param>
             <returns></returns>
         </member>
+        <member name="M:API.Controllers.ChapterController.GetChapters(System.Guid)">
+            <summary>
+            Get list of chapter.
+            </summary>
+            <param name="storyId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:API.Controllers.ChapterController.GetChapter(System.Guid,System.Guid)">
+            <summary>
+            Get individual chapter chapter
+            </summary>
+            <param name="storyId"></param>
+            <param name="chapterId">The id of the chapter</param>
+            <returns></returns>
+        </member>
         <member name="M:API.Controllers.CityController.GetCities">
             <summary>
             Get list of city.
