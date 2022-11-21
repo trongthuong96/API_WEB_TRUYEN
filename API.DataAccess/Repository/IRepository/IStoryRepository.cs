@@ -10,6 +10,7 @@ namespace API.Repository.IRepository
     {
         ICollection<Story> GetStories();
         ICollection<Story> GetStoriesToAuthor(string authorName);
+        ICollection<Story> GetStoriesToName(string name);
         Story GetStory(Guid storyId);
         bool StoryExists(Guid id);
         bool StoryExists(string name);

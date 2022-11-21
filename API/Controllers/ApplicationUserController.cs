@@ -1,6 +1,7 @@
 ﻿using API.DataAccess.Repository;
 using API.Models.Models;
 using API.Models.Models.Dtos;
+using API.Utility;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -80,7 +81,7 @@ namespace API.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (userCreateDto.UserName !=null && _userRepository.UserExists(userCreateDto.UserName))
+            if (userCreateDto.UserName != null && _userRepository.UserExists(userCreateDto.UserName))
             {
                 return StatusCode(404, "Đã có username này!");
             } else if (_userRepository.EmailExists(userCreateDto.Email))
@@ -97,6 +98,7 @@ namespace API.Controllers
 
             var result = _userManager.CreateAsync(userObj, userCreateDto.Password).GetAwaiter();
 
+            _userManager.AddToRoleAsync(userObj, SD.Role_User_Indi).GetAwaiter();
 
             if (result.IsCompleted)
             {
@@ -106,10 +108,59 @@ namespace API.Controllers
                     return StatusCode(500, ModelState);
                 }
             }
-
             
 
             return CreatedAtRoute("GetApplicationUser", new { userId = userObj.Id }, userObj);
+        }
+
+        [HttpPost("CheckUser", Name = "CheckUser")]
+        [ProducesResponseType(200, Type = typeof(ApplicationUserDto))]
+        public async Task<ActionResult<ApplicationUser>> CheckUser([FromBody] ApplicationUserDto userCreateDto)
+        {
+            if (userCreateDto == null)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var userObj = new ApplicationUser();
+
+            //check username && pass
+            if (userCreateDto.UserName != null)
+            {
+                userObj = await _userManager.FindByNameAsync(userCreateDto.UserName);
+
+                if (userObj == null)
+                {
+                    return StatusCode(401, "Sai tài khoản đăng nhập!");
+                }
+
+                var passwordOK = await _userManager.CheckPasswordAsync(userObj, userCreateDto.Password);
+                if (!passwordOK)
+                {
+                    return StatusCode(401, "Sai tài khoản đăng nhập!");
+                }
+            }    
+            
+            if(userCreateDto.Email != null)
+            {
+                //check email && pass
+                userObj = await _userManager.FindByEmailAsync(userCreateDto.Email);
+                if (userObj == null)
+                {
+                    return StatusCode(401, "Sai tài khoản đăng nhập!");
+                }
+                var passwordOK = await _userManager.CheckPasswordAsync(userObj, userCreateDto.Password);
+                if (!passwordOK)
+                {
+                    return StatusCode(401, "Sai tài khoản đăng nhập!");
+                }
+            }
+
+            ApplicationUserDto applicationUserDto = _mapper.Map<ApplicationUserDto>(userObj);
+            IList<string> role = await _userManager.GetRolesAsync(userObj);
+            applicationUserDto.Role = role;
+
+            return Ok(applicationUserDto);
         }
 
         [HttpPatch("{userId}", Name = "UpdateApplicationUser")]

@@ -66,7 +66,7 @@
         </member>
         <member name="M:API.Controllers.StoryController.GetStory(System.Guid)">
             <summary>
-            Get individual story story
+            Get individual story
             </summary>
             <param name="storyId">The id of the story</param>
             <returns></returns>

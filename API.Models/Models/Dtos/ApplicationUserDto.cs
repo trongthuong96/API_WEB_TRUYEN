@@ -12,5 +12,7 @@ namespace API.Models.Models.Dtos
         public string Email { get; set; }
         public string Password { get; set; }
         public string PhoneNumber { get; set; }
+        public IList<string> Role { get; set; }
+
     }
 }

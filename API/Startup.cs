@@ -46,6 +46,7 @@ namespace API
             services.AddScoped<ICategoryStoryRepository, CategoryStoryRepository>();
             services.AddScoped<IChapterRepository, ChapterRepository>();
             services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
+            services.AddScoped<ITickRepository, TickRepository>();
             services.AddAutoMapper(typeof(Mappings));
             services.AddSwaggerGen(options =>
             {
@@ -137,7 +138,7 @@ namespace API
             var poweruser = new ApplicationUser
             {
 
-                UserName = Configuration.GetValue<string>("UserName"),
+                UserName = Configuration.GetValue<string>("UserNames"),
                 Email = Configuration.GetValue<string>("UserEmail"),
                 EmailConfirmed = true,
             };

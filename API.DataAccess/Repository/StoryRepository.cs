@@ -1,6 +1,7 @@
 ﻿using API.Data;
 using API.Models;
 using API.Repository.IRepository;
+using API.Utility;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -41,7 +42,7 @@ namespace API.Repository
 
         public ICollection<Story> GetStories()
         {
-            return _db.Stories.OrderBy(c => c.Name).ToList();
+            return _db.Stories.OrderByDescending(c => c.CreateDate).ToList();
         }
 
         public ICollection<Story> GetStoriesToAuthor(string authorName)
@@ -57,6 +58,13 @@ namespace API.Repository
         public bool Save()
         {
             return _db.SaveChanges() >= 0 ? true : false;
+        }
+
+        public ICollection<Story> GetStoriesToName(string name)
+        {
+            return _db.Stories
+                .AsEnumerable()
+                .Where(c => SD.RemoveVietnameseTone(c.Name).Contains(SD.RemoveVietnameseTone(name))).ToList();
         }
     }
 }

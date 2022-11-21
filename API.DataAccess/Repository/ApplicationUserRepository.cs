@@ -35,7 +35,7 @@ namespace API.DataAccess.Repository
 
         public ApplicationUser GetUser(String userId)
         {
-            return _db.ApplicationUsers.FirstOrDefault(u => u.Id == userId);
+            return _db.ApplicationUsers.FirstOrDefault(u => u.Id == userId || u.UserName == userId || u.Email == userId);
         }
 
         public ICollection<ApplicationUser> GetUsers()

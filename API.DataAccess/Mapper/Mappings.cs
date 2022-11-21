@@ -25,6 +25,8 @@ namespace API.Mapper
             CreateMap<Chapter, ChapterUpdateDto>().ReverseMap();
             CreateMap<ApplicationUser, ApplicationUserDto>().ReverseMap();
             CreateMap<ApplicationUser, ApplicationUserCreateDto>().ReverseMap();
+            CreateMap<ApplicationUserDto, ApplicationUser>().ReverseMap();
+            CreateMap<Tick, TickDto>().ReverseMap();
         }
     }
 }

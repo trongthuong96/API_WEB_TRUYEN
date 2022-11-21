@@ -23,15 +23,17 @@ namespace API.Controllers
         private readonly IAuthorRepository _authorRepository;
         private readonly ICategoryRepository _categoryRepository;
         private readonly ICategoryStoryRepository _categoryStoryRepository;
+        private readonly ITickRepository _tickRepository;
         private readonly IMapper _mapper;
 
-        public StoryController(IStoryRepository storyRepository, IMapper mapper, IAuthorRepository authorRepository, ICategoryRepository categoryRepository, ICategoryStoryRepository categoryStoryRepository)
+        public StoryController(IStoryRepository storyRepository, IMapper mapper, IAuthorRepository authorRepository, ICategoryRepository categoryRepository, ICategoryStoryRepository categoryStoryRepository, ITickRepository tickRepository)
         {
             _storyRepository = storyRepository;
             _mapper = mapper;
             _authorRepository = authorRepository;
             _categoryRepository = categoryRepository;
             _categoryStoryRepository = categoryStoryRepository;
+            _tickRepository = tickRepository;
         }
 
         /// <summary>
@@ -68,7 +70,7 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Get individual story story
+        /// Get individual story
         /// </summary>
         /// <param name="storyId">The id of the story</param>
         /// <returns></returns>
@@ -99,6 +101,40 @@ namespace API.Controllers
             return Ok(objDto);
         }
 
+        //search name
+
+        [HttpGet("search", Name = "search")]
+        [ProducesResponseType(200, Type = typeof(StoryDto))]
+        [ProducesResponseType(404)]
+        [ProducesDefaultResponseType]
+        public IActionResult GetStoriesName([FromQuery]string name)
+        {
+            var objList = _storyRepository.GetStoriesToName(name);
+
+            var objDto = new List<StoryDto>();
+            var storyDto = new StoryDto();
+
+            foreach (var obj in objList)
+            {
+                storyDto = _mapper.Map<StoryDto>(obj);
+                // author name
+                storyDto.AuthorName = _authorRepository.GetAuthor(obj.AuthorId).pseudonym;
+
+                // category name
+                ICollection<CategoryStory> list = _categoryStoryRepository.GetCategories(storyDto.Id);
+                storyDto.CategoryName = new List<String>();
+
+                foreach (CategoryStory cs in list)
+                {
+                    storyDto.CategoryName.Add(_categoryRepository.GetCategory(cs.CategoryId).Name);
+                }
+                objDto.Add(storyDto);
+            }
+
+            return Ok(objDto);
+        }
+
+        // insert story
         [HttpPost]
         [ProducesResponseType(201, Type = typeof(StoryDto))]
         //[ProducesResponseType(StatusCodes.Status201Created)]
@@ -200,6 +236,7 @@ namespace API.Controllers
             return CreatedAtRoute("GetStory", new { storyId = storyObj.Id }, storyObj);
         }
 
+        //edit story
         [HttpPatch("{storyId:Guid}", Name = "UpdateStory")]
         [ProducesResponseType(200, Type = typeof(StoryDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -225,6 +262,7 @@ namespace API.Controllers
             return Ok(storyObj);
         }
 
+        //delete story
         [HttpDelete("{storyId:Guid}", Name = "DeleteStory")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -246,6 +284,81 @@ namespace API.Controllers
             }
 
             return NoContent();
+        }
+
+        //post tick
+        [HttpPost("Tick")]
+        public IActionResult TickPost([FromBody] TickDto tickDto) 
+        {
+            if (!_storyRepository.StoryExists(tickDto.StoryId))
+            {
+                return NotFound();
+            }
+
+            Tick tick = _mapper.Map<Tick>(tickDto);
+            if (!_tickRepository.CreateTick(tick))
+            {
+                return StatusCode(401, "Loi luu");
+            }
+            return Ok(tick);
+        }
+
+        //delete tick
+        [HttpDelete("Tick")]
+        public IActionResult TickDelete([FromBody] TickDto tickDto)
+        {
+            if (!_storyRepository.StoryExists(tickDto.StoryId))
+            {
+                return NotFound();
+            }
+
+            Tick tick = _mapper.Map<Tick>(tickDto);
+            if (!_tickRepository.DeleteTick(tick))
+            {
+                return StatusCode(401, "Loi luu");
+            }
+            return Ok(tick);
+        }
+
+        //get tick
+        [HttpGet("Tick")]
+        public IActionResult TickGet(string userId)
+        {
+            ICollection<Tick> tick = _tickRepository.GetTick(userId);
+            List<StoryDto> storyDtos = new List<StoryDto>(); 
+            foreach(Tick t in tick)
+            {
+                var obj = _storyRepository.GetStory(t.StoryId);
+                if (obj == null)
+                {
+                    return NotFound();
+                }
+
+                var objDto = _mapper.Map<StoryDto>(obj);
+                objDto.AuthorName = _authorRepository.GetAuthor(obj.AuthorId).pseudonym;
+
+                // category name
+                ICollection<CategoryStory> list = _categoryStoryRepository.GetCategories(objDto.Id);
+                objDto.CategoryName = new List<String>();
+
+                foreach (CategoryStory cs in list)
+                {
+                    objDto.CategoryName.Add(_categoryRepository.GetCategory(cs.CategoryId).Name);
+                }
+
+                storyDtos.Add(objDto);
+            }
+            return Ok(storyDtos);
+        }
+
+        [HttpGet("ExistTick/{userId}/{storyId:Guid}")]
+        public IActionResult ExistTick(string userId, Guid storyId)
+        {
+            if(_tickRepository.TickExists(userId, storyId))
+            {
+                return Ok(new TickDto(userId, storyId));
+            }
+            return NotFound();
         }
     }
 }
