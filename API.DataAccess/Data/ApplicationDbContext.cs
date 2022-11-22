@@ -28,6 +28,7 @@ namespace API.Data
         public DbSet<Tick> Ticks { get; set; }
         public DbSet<Author> Authors { get; set; }
         public DbSet<Chapter> Chapters { get; set; }
+        public DbSet<Comment> Comments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
