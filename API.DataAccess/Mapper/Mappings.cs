@@ -27,6 +27,9 @@ namespace API.Mapper
             CreateMap<ApplicationUser, ApplicationUserCreateDto>().ReverseMap();
             CreateMap<ApplicationUserDto, ApplicationUser>().ReverseMap();
             CreateMap<Tick, TickDto>().ReverseMap();
+            CreateMap<Comment, CommentCreateDto>().ReverseMap();
+            CreateMap<Comment, CommentDto>().ReverseMap();
+            CreateMap<Comment, CommentDeleteDto>().ReverseMap();
         }
     }
 }

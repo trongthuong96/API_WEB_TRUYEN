@@ -58,6 +58,12 @@
             <param name="cityId">The Id of the city</param>
             <returns></returns>
         </member>
+        <member name="M:API.Controllers.CommentController.GetComments(System.Guid)">
+            <summary>
+            Get list of comment story.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:API.Controllers.StoryController.GetStories">
             <summary>
             Get list of story.

@@ -47,6 +47,7 @@ namespace API
             services.AddScoped<IChapterRepository, ChapterRepository>();
             services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
             services.AddScoped<ITickRepository, TickRepository>();
+            services.AddScoped<ICommentRepository, CommentRepository>();
             services.AddAutoMapper(typeof(Mappings));
             services.AddSwaggerGen(options =>
             {
