@@ -30,7 +30,9 @@ namespace API.DataAccess.Repository
         public ICollection<Comment> GetComments(Guid storyId)
         {
             return _db.Comments
-                .Where(c => c.StoryId == storyId).ToList();
+                .Where(c => c.StoryId == storyId)
+                .OrderByDescending(c => c.CreateDate)
+                .ToList();
         }
 
         public bool Save()

@@ -15,7 +15,7 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ApplicationUserController : Controller
+    public class ApplicationUserController : ControllerBase
     {
         private readonly IApplicationUserRepository _userRepository;
         private readonly IMapper _mapper;
@@ -69,12 +69,13 @@ namespace API.Controllers
             return Ok(objDto);
         }
 
+        // add user
         [HttpPost]
         [ProducesResponseType(201, Type = typeof(ApplicationUserDto))]
         //[ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult CreateApplicationUser([FromBody] ApplicationUserCreateDto userCreateDto)
+        public async Task<IActionResult> CreateApplicationUserAsync([FromBody] ApplicationUserCreateDto userCreateDto)
         {
             if (userCreateDto == null)
             {
@@ -86,7 +87,7 @@ namespace API.Controllers
                 return StatusCode(404, "Đã có username này!");
             } else if (_userRepository.EmailExists(userCreateDto.Email))
             {
-                return StatusCode(404, "Đã có email này!");
+                return StatusCode(405, "Đã có email này!");
             }
 
             if (!ModelState.IsValid)
@@ -97,22 +98,21 @@ namespace API.Controllers
             var userObj = _mapper.Map<ApplicationUser>(userCreateDto);
 
             var result = _userManager.CreateAsync(userObj, userCreateDto.Password).GetAwaiter();
-
             _userManager.AddToRoleAsync(userObj, SD.Role_User_Indi).GetAwaiter();
 
             if (result.IsCompleted)
             {
-                if (!_userRepository.CreateUser(userObj))
+                await Task.Delay(1000);
+                if (! _userRepository.CreateUser(userObj))
                 {
                     ModelState.AddModelError("", $"Đã xảy ra sự cố khi lưu {userObj.UserName}");
                     return StatusCode(500, ModelState);
                 }
             }
-            
-
             return CreatedAtRoute("GetApplicationUser", new { userId = userObj.Id }, userObj);
         }
 
+        // check user
         [HttpPost("CheckUser", Name = "CheckUser")]
         [ProducesResponseType(200, Type = typeof(ApplicationUserDto))]
         public async Task<ActionResult<ApplicationUser>> CheckUser([FromBody] ApplicationUserDto userCreateDto)
@@ -163,6 +163,20 @@ namespace API.Controllers
             return Ok(applicationUserDto);
         }
 
+        // create token
+        [HttpPost("authenticate")]
+        public IActionResult Authenticate([FromBody] ApplicationUserDto applicationUser)
+        {
+            var user = _userRepository.Authenticate(applicationUser.UserName, applicationUser.Password);
+            if(applicationUser == null)
+            {
+                return BadRequest(new { message = "Loi tai khoan" });
+            }
+
+            return Ok(user);
+        }
+
+        //edit user
         [HttpPatch("{userId}", Name = "UpdateApplicationUser")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -185,6 +199,7 @@ namespace API.Controllers
             return NoContent();
         }
 
+        //delete user
         [HttpDelete("{userId}", Name = "DeleteApplicationUser")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

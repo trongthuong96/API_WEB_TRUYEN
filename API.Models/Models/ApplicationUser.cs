@@ -13,5 +13,7 @@ namespace API.Models.Models
         public string FullName { get; set; }
         public ICollection<Like> Likes { get; set; }
         public ICollection<Tick> Ticks { get; set; }
+        [NotMapped]
+        public string Token { get; set; }
     }
 }

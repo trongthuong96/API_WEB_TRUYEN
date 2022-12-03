@@ -19,7 +19,7 @@ namespace API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public class StoryController : Controller
+    public class StoryController : ControllerBase
     {
         private readonly IStoryRepository _storyRepository;
         private readonly IAuthorRepository _authorRepository;

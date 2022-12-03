@@ -14,7 +14,7 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ChapterController : Controller
+    public class ChapterController : ControllerBase
     {
         private readonly IChapterRepository _chapterRepository;
         private readonly IMapper _mapper;

@@ -1,5 +1,7 @@
 ﻿using API.Data;
 using API.Models.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +12,20 @@ namespace API.DataAccess.Repository
     public class ApplicationUserRepository : IApplicationUserRepository
     {
         private readonly ApplicationDbContext _db;
-        public ApplicationUserRepository(ApplicationDbContext db)
+        private readonly AppSettings _appSettings;
+        private readonly IPasswordHasher<ApplicationUser> _passwordHasher;
+        public ApplicationUserRepository(ApplicationDbContext db, IOptions<AppSettings> appSettings, IPasswordHasher<ApplicationUser> passwordHasher)
         {
             _db = db;
+            _appSettings = appSettings.Value;
+            _passwordHasher = passwordHasher;
         }
- 
+
+        public ApplicationUser Authenticate(string username, string password)
+        {
+            // var user = _db.ApplicationUsers.SingleOrDefault(x => x.UserName == username && _passwordHasher.VerifyHashedPassword(x,x.PasswordHash, password));
+            return null;
+        }
 
         public bool CreateUser(ApplicationUser user)
         {
@@ -50,7 +61,8 @@ namespace API.DataAccess.Repository
 
         public bool UpdateUser(ApplicationUser user)
         {
-            throw new NotImplementedException();
+            _db.ApplicationUsers.Update(user);
+            return Save();
         }
 
         public bool UserExists(string userName)

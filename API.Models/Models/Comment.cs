@@ -10,6 +10,7 @@ namespace API.Models.Models
     {
         [Key]
         public Guid Id { get; set; }
+        [Required]
         public string Content { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }

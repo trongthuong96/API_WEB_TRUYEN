@@ -10,6 +10,7 @@ namespace API.DataAccess.Repository
     {
         ICollection<ApplicationUser> GetUsers();
         ApplicationUser GetUser(string userId);
+        ApplicationUser Authenticate(string username, string password);
         bool UserExists(string userName);
         bool EmailExists(string email);
         bool CreateUser(ApplicationUser user);
