@@ -97,18 +97,12 @@ namespace API.Controllers
 
             var userObj = _mapper.Map<ApplicationUser>(userCreateDto);
 
-            var result = _userManager.CreateAsync(userObj, userCreateDto.Password).GetAwaiter();
-            _userManager.AddToRoleAsync(userObj, SD.Role_User_Indi).GetAwaiter();
+            var result = await _userManager.CreateAsync(userObj, userCreateDto.Password);
 
-            if (result.IsCompleted)
-            {
-                await Task.Delay(1000);
-                if (! _userRepository.CreateUser(userObj))
-                {
-                    ModelState.AddModelError("", $"Đã xảy ra sự cố khi lưu {userObj.UserName}");
-                    return StatusCode(500, ModelState);
-                }
-            }
+            await _userManager.AddToRoleAsync(userObj, SD.Role_User_Indi);
+
+            await _userManager.UpdateAsync(userObj);
+            
             return CreatedAtRoute("GetApplicationUser", new { userId = userObj.Id }, userObj);
         }
 
