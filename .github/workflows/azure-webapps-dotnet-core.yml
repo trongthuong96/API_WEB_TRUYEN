@@ -39,14 +39,14 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       
-      - uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '2.2.106'
+#       - uses: actions/setup-dotnet@v1
+#         with:
+#           dotnet-version: '2.2.106'
           
-      - uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '6.0.100-preview.4.21255.9'
-          include-prerelease: true
+#       - uses: actions/setup-dotnet@v1
+#         with:
+#           dotnet-version: '6.0.100-preview.4.21255.9'
+#           include-prerelease: true
 
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v2
