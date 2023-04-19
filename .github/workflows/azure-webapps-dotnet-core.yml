@@ -38,6 +38,15 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      
+      - uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '2.2.106'
+          
+      - uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.100-preview.4.21255.9'
+          include-prerelease: true
 
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v2
@@ -86,11 +95,5 @@ jobs:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-      - uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '2.2.106'
-      - uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '6.0.100-preview.4.21255.9'
-          include-prerelease: true
+      
    
