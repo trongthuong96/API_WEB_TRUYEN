@@ -20,7 +20,7 @@ jobs:
       - name: Azure Login
         uses: azure/login@v1
         with:
-          creds: ${{ secrets.trongthuong96 }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
       
       - name: 'Checkout GitHub Action'
         uses: actions/checkout@v2
