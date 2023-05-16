@@ -8,23 +8,30 @@ on:
     branches:
       - master
   workflow_dispatch:
-
 env:
   AZURE_FUNCTIONAPP_PACKAGE_PATH: '.' # set this to the path to your web app project, defaults to the repository root
   DOTNET_VERSION: '6.0.x' # set this to the dotnet version to use
+
+permissions:
+      id-token: write
+      contents: read
 
 jobs:
   build-and-deploy:
     runs-on: windows-latest
     steps:
-      - name: Install Azure CLI
-        uses: azure/setup-az-cli@v1
-          
-      - name: Azure Login
+      - name: OIDC Login to Azure Public Cloud with AzPowershell (enableAzPSSession true)
         uses: azure/login@v1
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-          enable-AzPSSession: true 
+          client-id: ${{ secrets.trongthuong96 }}
+          enable-AzPSSession: true
+
+      - name: 'Get RG with powershell action'
+        uses: azure/powershell@v1
+        with:
+           inlineScript: |
+             Get-AzResourceGroup
+           azPSVersion: "latest"
       
       - name: 'Checkout GitHub Action'
         uses: actions/checkout@v2
