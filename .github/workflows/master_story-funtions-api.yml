@@ -24,6 +24,8 @@ jobs:
         uses: azure/login@v1
         with:
           client-id: ${{ secrets.trongthuong96 }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }} 
           enable-AzPSSession: true
 
       - name: 'Get RG with powershell action'
