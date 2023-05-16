@@ -39,4 +39,4 @@ jobs:
           app-name: 'Story-Funtions-API'
           slot-name: 'Production'
           package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_A83BF7AA2C794BFFA228F7624A14EE56 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_CB4BF646228F42619254EF8BE6C8D0E3 }}
