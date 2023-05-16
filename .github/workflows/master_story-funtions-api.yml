@@ -20,15 +20,7 @@ jobs:
   build-and-deploy:
     runs-on: windows-latest
     steps:
-      
-
-      - name: 'Get RG with powershell action'
-        uses: azure/powershell@v1
-        with:
-           inlineScript: |
-             Get-AzResourceGroup
-           azPSVersion: "latest"
-      
+          
       - name: 'Checkout GitHub Action'
         uses: actions/checkout@v2
 
