@@ -21,6 +21,10 @@ jobs:
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
+          enable-AzPSSession: true 
+     
+      - run: |
+         Get-AzVM -ResourceGroupName "ResourceGroup11"
       
       - name: 'Checkout GitHub Action'
         uses: actions/checkout@v2
